@@ -1,7 +1,7 @@
 {
 	"name": "python-auto-import",
 	"displayName": "Python Auto Import",
-	"description": "",
+	"description": "Suggest Auto-import for third-party modules based on modules already imported.",
 	"version": "0.0.1",
 	"publisher": "virgilsisoe",
 	"repository": {
