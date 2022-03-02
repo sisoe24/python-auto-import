@@ -4,6 +4,10 @@
 	"description": "",
 	"version": "0.0.1",
 	"publisher": "virgilsisoe",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/sisoe24/python-auto-import"
+	},
 	"license": "MIT",
 	"engines": {
 		"vscode": "^1.64.0"
@@ -12,13 +16,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onStartupFinished"
+		"onLanguage:python"
 	],
 	"keywords": [
 		"python",
 		"auto-import",
 		"import",
-		"auto"
+		"auto",
+		"third-party"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
