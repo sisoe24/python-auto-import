@@ -2,6 +2,8 @@
 
 Suggest auto import for third-party modules based on modules already imported for Visual Studio Code.
 
+![Demo](https://raw.githubusercontent.com/sisoe24/python-auto-import/main/resources/Demo.gif)
+
 ## Disclaimer
 
 This feature used to be part of VS Code-Plyance but for some reason it does not work anymore.
@@ -26,14 +28,10 @@ There suggestion are also shown slightly different:
 
 Pylance
 
-![Pylance](/resources/pylance.jpg)
+![Pylance](https://raw.githubusercontent.com/sisoe24/python-auto-import/main/resources/pylance.jpg)
 
 Extension
 
-![Extension](/resources/extension.jpg)
+![Extension](https://raw.githubusercontent.com/sisoe24/python-auto-import/main/resources/extension.jpg)
 
 So if there is a problem, you know who to blame  🤭
-
-## Demo
-
-![Demo](/resources/demo.gif)
