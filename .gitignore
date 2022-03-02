@@ -1,0 +1,12 @@
+out
+dist
+
+coverage
+.nyc_output
+
+node_modules
+.vscode-test/
+.vscode
+*.vsix
+
+demo
