@@ -18,6 +18,7 @@
 		"node_modules",
 		".vscode-test",
 		"demo",
-		"scripts"
+		"scripts",
+		"other"
 	]
 }
