@@ -2,7 +2,7 @@
 
 Suggest auto import for third-party modules based on modules already imported for Visual Studio Code.
 
-![Demo](https://raw.githubusercontent.com/sisoe24/python-auto-import/main/resources/Demo.gif)
+![Demo](https://raw.githubusercontent.com/sisoe24/python-auto-import/main/resources/demo.gif)
 
 ## Disclaimer
 
