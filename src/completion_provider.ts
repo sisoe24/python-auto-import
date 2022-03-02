@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import * as path from "path";
 import * as cp from "child_process";
 
-type PythonDict = {
+type PythonCompletionDict = {
     label: string;
     details: {
         type: number;
@@ -11,7 +11,7 @@ type PythonDict = {
     };
 }[];
 
-export class PyAutoImport implements vscode.CompletionItemProvider {
+export class PyCompletionProvider implements vscode.CompletionItemProvider {
     provideCompletionItems(
         document: vscode.TextDocument,
         position: vscode.Position
@@ -20,8 +20,22 @@ export class PyAutoImport implements vscode.CompletionItemProvider {
     > {
         const linePrefix = document.lineAt(position).text.substring(0, position.character);
 
-        const match = /(?<=\s|^|\()\w/.exec(linePrefix);
-        if (match) {
+        // Don't suggest when inline import statement
+        if (/(from|import)/.test(linePrefix)) {
+            return null;
+        }
+
+        // Don't suggest if is part of an `from x import ()` statement
+        const textTillCursor = document.getText(
+            new vscode.Range(0, 0, position.line, position.character)
+        );
+        const hoverWord = document.getText(document.getWordRangeAtPosition(position));
+        if (!RegExp(`from.+?\\).+${hoverWord}`, "s").test(textTillCursor)) {
+            return null;
+        }
+
+        //When word starts at beginning, space or inside parenthesis
+        if (/(?<=\s|^|\()\w/.exec(linePrefix)) {
             return this.getCompletionList(document);
         }
 
@@ -32,8 +46,12 @@ export class PyAutoImport implements vscode.CompletionItemProvider {
         return document.getText().match(/(?<=from\s)((?:\w+\.?)+)/g);
     }
 
-    private getPythonCompletionList(document: vscode.TextDocument): Promise<PythonDict> | null {
+    private getPythonCompletionList(
+        document: vscode.TextDocument
+    ): Promise<PythonCompletionDict> | null {
         const imports = this.getImports(document);
+        console.log("🚀 ~ imports", imports);
+
         if (!imports) {
             return null;
         }
@@ -43,17 +61,18 @@ export class PyAutoImport implements vscode.CompletionItemProvider {
             ?.extensionPath as string;
         const script = path.join(extPath, "scripts", "get_imports.py");
 
-        let result: PythonDict;
+        let result: PythonCompletionDict;
 
         cp.exec(`${pyBin} ${script} ${imports}`, async (err, stdout, stderr) => {
-            result = (await JSON.parse(stdout)) as PythonDict;
+            console.log("🚀 ~ stdout", stdout);
+            result = (await JSON.parse(stdout)) as PythonCompletionDict;
 
             if (stderr) {
-                console.error("stderr: " + stderr);
+                vscode.window.showErrorMessage(stderr);
                 return null;
             }
             if (err) {
-                console.error("error: " + err);
+                vscode.window.showErrorMessage(err.message);
                 return null;
             }
         });
@@ -77,11 +96,13 @@ export class PyAutoImport implements vscode.CompletionItemProvider {
             }
             const element = new vscode.CompletionItem(item.label, item.details.type);
 
-            element.detail = "Auto-Import";
-            element.documentation = item.details.package;
+            const markdownDoc = new vscode.MarkdownString();
+            markdownDoc.appendCodeblock(`from ${item.details.package} import ${item.label}`);
+            element.documentation = markdownDoc;
+            element.detail = "Python-Auto-Import";
 
-            // XXX: I should be able to pass a list of arguments to element.arguments
-            // But It does not work
+            // XXX: I should be able to pass a list to element.arguments but It does not work
+            // So I am passing a string to be splitted by the comma.
             element.command = {
                 command: "python-auto-import.autoImport",
                 title: "Python Auto Import Command",

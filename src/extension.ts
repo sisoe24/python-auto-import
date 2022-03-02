@@ -1,10 +1,10 @@
 import * as vscode from "vscode";
-import { PyAutoImport } from "./get_python_completion";
+import { PyCompletionProvider } from "./completion_provider";
 import { insertImport } from "./insert_import";
 
 export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
-        vscode.languages.registerCompletionItemProvider("python", new PyAutoImport())
+        vscode.languages.registerCompletionItemProvider("python", new PyCompletionProvider())
     );
 
     context.subscriptions.push(
