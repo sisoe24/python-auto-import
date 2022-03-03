@@ -90,7 +90,7 @@ def create_completions(module):
 
 _, *args = sys.argv
 
-# the modules are sended inside a stringified list '[foo, bar]'
+# the modules are sent inside a stringified list '[foo, bar]'
 modules = args[0].split(',')
 
 for arg in modules:
