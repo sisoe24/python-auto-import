@@ -2,7 +2,7 @@
 	"name": "python-auto-import",
 	"displayName": "Python Auto Import",
 	"description": "Suggest Auto-import for third-party modules based on modules already imported.",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"publisher": "virgilsisoe",
 	"repository": {
 		"type": "git",
