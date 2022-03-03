@@ -64,7 +64,7 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
         let result: PythonCompletionDict;
 
         cp.exec(`${pyBin} ${script} ${imports}`, async (err, stdout, stderr) => {
-            console.log("🚀 ~ stdout", stdout);
+            // console.log("🚀 ~ stdout", stdout);
             result = (await JSON.parse(stdout)) as PythonCompletionDict;
 
             if (stderr) {
