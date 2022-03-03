@@ -94,8 +94,12 @@ _, *args = sys.argv
 modules = args[0].split(',')
 
 for arg in modules:
-    module = importlib.import_module(arg)
-    create_completions(module)
+    try:
+        module = importlib.import_module(arg)
+    except ModuleNotFoundError:
+        pass
+    else:
+        create_completions(module)
 
 # This is used to end to stdout
-print(json.dumps(COMPLETIONS))
+print(json.dumps(COMPLETIONS or ""))
