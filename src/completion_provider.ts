@@ -50,7 +50,7 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
         document: vscode.TextDocument
     ): Promise<PythonCompletionDict> | null {
         const imports = this.getImports(document);
-        console.log("🚀 ~ imports", imports);
+        // console.log("🚀 ~ imports", imports);
 
         if (!imports) {
             return null;
