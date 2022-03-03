@@ -7,10 +7,10 @@ Suggest auto import for third-party modules based on modules already imported fo
 ## Disclaimer
 
 This feature used to be part of VS Code-Plyance but for some reason it does not work anymore.
-I have asked around but still no response, so in the meantime, I made my own extension
+I have asked around but still no response, and in the meantime, I made my own extension
 as a workaround.
 
-So keep in mind that this extension is pretty rough around the edges and is not meant to cover every possible case (for now), as VS Code might introduce back the functionality.
+So keep in mind that this extension is an afternoon of code and is not meant to cover every possible case (at least for now), as VS Code might introduce back the functionality.
 
 ## Requirements
 
