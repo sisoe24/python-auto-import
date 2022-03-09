@@ -34,8 +34,8 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
             return null;
         }
 
-        //When word starts at beginning, space or inside parenthesis
-        if (/(?<=\s|^|\()\w/.exec(linePrefix)) {
+        // When word starts at beginning, space or inside parenthesis
+        if (/(?<=\s|^|\()\w$/.exec(linePrefix)) {
             return this.getCompletionList(document);
         }
 
