@@ -26,12 +26,14 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
         }
 
         // Don't suggest if is part of an `from x import ()` statement
-        const textTillCursor = document.getText(
-            new vscode.Range(0, 0, position.line, position.character)
-        );
-        const hoverWord = document.getText(document.getWordRangeAtPosition(position));
-        if (!RegExp(`from.+?\\).+${hoverWord}`, "s").test(textTillCursor)) {
-            return null;
+        const line = position.line;
+        for (const range of this.getImportsRange(document)) {
+            const insideStatement = (n: number) => {
+                return n >= range[0] && n <= range[1];
+            };
+            if (insideStatement(line)) {
+                return null;
+            }
         }
 
         // When word starts at beginning, space or inside parenthesis
@@ -40,6 +42,44 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
         }
 
         return null;
+    }
+
+    /**
+     * Get all of the import statement ranges to check if cursor is inside.
+     * If is inside then do not suggest because it will create duplicates
+     * 
+     * @param document vscode editor document object
+     * @returns a list of list of ranges `[[start, end], [start, end]]` if found or an empty list 
+     * if no range was found.
+     */
+    private getImportsRange(document: vscode.TextDocument) {
+        const ranges: any[] = [];
+
+        const imports = this.getImports(document);
+        if (!imports) {
+            return [];
+        }
+
+        for (let i = 0; i < document.lineCount; i++) {
+            const line = document.lineAt(i);
+            const lineText = line.text;
+
+            let startLine = 0;
+
+            if (/from.+?\(/.test(lineText)) {
+                startLine = line.lineNumber;
+            }
+
+            if (lineText.endsWith(")")) {
+                ranges.push([startLine, line.lineNumber]);
+
+                if (ranges.length >= imports.length) {
+                    break;
+                }
+            }
+        }
+
+        return ranges;
     }
 
     private getImports(document: vscode.TextDocument): string[] | null {
