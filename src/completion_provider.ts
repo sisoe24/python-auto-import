@@ -12,6 +12,8 @@ type PythonCompletionDict = {
 }[];
 
 export class PyCompletionProvider implements vscode.CompletionItemProvider {
+    imports: string[] | null = [];
+
     provideCompletionItems(
         document: vscode.TextDocument,
         position: vscode.Position
@@ -19,25 +21,40 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
         vscode.CompletionItem[] | vscode.CompletionList<vscode.CompletionItem>
     > {
         const linePrefix = document.lineAt(position).text.substring(0, position.character);
+        // console.log("🚀 ~ Start provider:", linePrefix);
+
+        this.imports = this.getAllImports(document);
+        if (!this.imports) {
+            // console.log("No imports found so no suggestion");
+            return null;
+        }
 
         // Don't suggest when inline import statement
         if (/(from|import)/.test(linePrefix)) {
+            // console.log("Don't suggest when inline import statement");
             return null;
         }
 
         // Don't suggest if is part of an `from x import ()` statement
-        const line = position.line;
-        for (const range of this.getImportsRange(document)) {
-            const insideStatement = (n: number) => {
-                return n >= range[0] && n <= range[1];
-            };
-            if (insideStatement(line)) {
-                return null;
+        const parenthesisImports = this.getParenthesisImports(document);
+        if (parenthesisImports) {
+            const line = position.line;
+            const ranges = this.getImportsRange(document, parenthesisImports.length);
+
+            for (const range of ranges) {
+                const insideStatement = (n: number) => {
+                    return n >= range[0] && n <= range[1];
+                };
+                if (insideStatement(line)) {
+                    // console.log("dont suggest. cursor is inside statement");
+                    return null;
+                }
             }
         }
 
-        // When word starts at beginning, space or inside parenthesis
+        // Suggest when word starts at beginning, space or inside parenthesis
         if (/(?<=\s|^|\()\w$/.exec(linePrefix)) {
+            // console.log("Start suggesting");
             return this.getCompletionList(document);
         }
 
@@ -47,18 +64,13 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
     /**
      * Get all of the import statement ranges to check if cursor is inside.
      * If is inside then do not suggest because it will create duplicates
-     * 
+     *
      * @param document vscode editor document object
-     * @returns a list of list of ranges `[[start, end], [start, end]]` if found or an empty list 
+     * @returns a list of list of ranges `[[start, end], [start, end]]` if found or an empty list
      * if no range was found.
      */
-    private getImportsRange(document: vscode.TextDocument) {
+    private getImportsRange(document: vscode.TextDocument, numImports: number) {
         const ranges: any[] = [];
-
-        const imports = this.getImports(document);
-        if (!imports) {
-            return [];
-        }
 
         for (let i = 0; i < document.lineCount; i++) {
             const line = document.lineAt(i);
@@ -73,7 +85,7 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
             if (lineText.endsWith(")")) {
                 ranges.push([startLine, line.lineNumber]);
 
-                if (ranges.length >= imports.length) {
+                if (ranges.length >= numImports) {
                     break;
                 }
             }
@@ -82,20 +94,40 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
         return ranges;
     }
 
-    private getImports(document: vscode.TextDocument): string[] | null {
+    /**
+     * Get all `from x import y` statements present in document.
+     * 
+     * This will also include the `from x import (y)`.
+     * 
+     * @param document vscode document object
+     * @returns a string with the base identifier or null if no match is found.
+     */
+    private getAllImports(document: vscode.TextDocument): string[] | null {
         return document.getText().match(/(?<=from\s)((?:\w+\.?)+)/g);
     }
+    
+    /**
+     * Get only the `from x import (y)` statements present in document.
+     * 
+     * @param document vscode document object
+     * @returns a string with the base identifier or null if no match is found.
+     */
+    private getParenthesisImports(document: vscode.TextDocument): string[] | null {
+        return document.getText().match(/from.+?\(/g);
+    }
 
+    /**
+     * Get the python completion list elements.
+     * 
+     * The completion list is created by executing a shell command invoking a
+     * python script which will then print the result on stdout.
+     * 
+     * @param document vscode document object.
+     * @returns a PythonCompletionDict object or null if none are found.
+     */
     private getPythonCompletionList(
         document: vscode.TextDocument
     ): Promise<PythonCompletionDict> | null {
-        const imports = this.getImports(document);
-        // console.log("🚀 ~ imports", imports);
-
-        if (!imports) {
-            return null;
-        }
-
         const pyBin = vscode.workspace.getConfiguration("python").get("defaultInterpreterPath");
         const extPath = vscode.extensions.getExtension("virgilsisoe.python-auto-import")
             ?.extensionPath as string;
@@ -103,7 +135,7 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
 
         let result: PythonCompletionDict;
 
-        cp.exec(`${pyBin} ${script} ${imports}`, async (err, stdout, stderr) => {
+        cp.exec(`${pyBin} ${script} ${this.imports}`, async (err, stdout, stderr) => {
             // console.log("🚀 ~ stdout", stdout);
             result = (await JSON.parse(stdout)) as PythonCompletionDict;
 
@@ -123,6 +155,15 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
         });
     }
 
+    /**
+     * Generate the completion items suggestion for the provider.
+     * 
+     * Each completion item is bound to a command which will trigger the command
+     * to insert its value inside the `from import` statements.
+     * 
+     * @param document vscode document object
+     * @returns the completion items list or null
+     */
     private async getCompletionList(document: vscode.TextDocument) {
         const pythonCompletionList = await this.getPythonCompletionList(document);
         if (!pythonCompletionList) {
@@ -141,7 +182,7 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
             element.documentation = markdownDoc;
             element.detail = "Python-Auto-Import";
 
-            // XXX: I should be able to pass a list to element.arguments but It does not work
+            // I should be able to pass a list to element.arguments but It does not work
             // So I am passing a string to be splitted by the comma.
             element.command = {
                 command: "python-auto-import.autoImport",
