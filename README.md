@@ -6,31 +6,32 @@ Suggest auto import for third-party modules based on modules already imported fo
 
 ## Disclaimer
 
-This feature used to be part of VS Code-Plyance but for some reason it does not work anymore.
-I have asked around but still no response, so I made my own extension as a workaround.
+This feature used to be part of VS Code-Pylance but currently does not work anymore.
+So while waiting for some updates to fix it/bring it back, I made my own extension as a quick workaround.
 
-So keep in mind that this extension is an afternoon of code and is not meant to cover every possible case (at least for now), since VS Code could introduces it back.
+This is to let you know that, this extension, is just a "quick patch" and might not cover every case (at least for now).
 
-## Requirements
+## Usage
 
-The setting: `python.defaultInterpreterPath` must be set with the Python interpreter for the environment.
-If the setting is not set, the extension will still grab the settings value, but what will get, is the default base OS `python` interpreter (which usually won't have access to all of the third party libraries).
+- Inside the `.vscode/settings.json`, the setting `python.defaultInterpreterPath` must be set with the Python interpreter which has access to the environment libraries.
 
-**NOTE**: even if your workspace has currently detected the proper Python interpreter, the extension still needs the full path for it, and the only way that I know of, is by getting the value from `python.defaultInterpreterPath`.
+![path](/resources/path.jpg)
+
+### NOTE
+
+  1. If you don't set `python.defaultInterpreterPath`, the extension will get the OS base `python` interpreter (which usually does not have access to specific third-party libraries).
+  2. Even if your workspace has currently detected the proper Python interpreter, the extension still needs the full path of it, and the only way I am aware on how to get it, is from `python.defaultInterpreterPath`.
 
 ## Difference from Pylance
 
-The extension attempts imports only from a `from module import` statement, while Pylance
-is much broader (albeit currently not working for third-party modules).
+The extension offers import suggestions only after a `from module import` statement is present inside the file, while Pylance is much broader (albeit currently not working for third-party modules).
 
-There suggestion are also shown slightly different:
+There suggestion are also shown slightly different, so if there is a problem, you know who to blame.
 
-Pylance
+- Pylance
 
-![Pylance](/resources/pylance.jpg)
+    ![Pylance](/resources/pylance.jpg)
 
-Extension
+- Extension
 
-![Extension](/resources/extension.jpg)
-
-So if there is a problem, you know who to blame  🤭
+    ![Extension](/resources/extension.jpg)
