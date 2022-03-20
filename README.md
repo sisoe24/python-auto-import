@@ -9,7 +9,7 @@ Suggest auto import for third-party modules based on modules already imported fo
 This feature used to be part of VS Code-Pylance but currently does not work anymore.
 So while waiting for some updates to fix it/bring it back, I made my own extension as a quick workaround.
 
-This is to let you know that, this extension, is just a "quick patch" and might not cover every case (at least for now).
+This is to let you know that this extension, is just a "quick patch" and might not cover every case (at least for now).
 
 ## Usage
 
@@ -26,7 +26,7 @@ This is to let you know that, this extension, is just a "quick patch" and might 
 
 The extension offers import suggestions only after a `from module import` statement is present inside the file, while Pylance is much broader (albeit currently not working for third-party modules).
 
-There suggestion are also shown slightly different, so if there is a problem, you know who to blame.
+The suggestion hints are also shown slightly different, so if there is a problem, you know who to blame.
 
 - Pylance
 
