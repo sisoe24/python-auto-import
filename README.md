@@ -9,7 +9,7 @@ Suggest auto import for third-party modules based on modules already imported fo
 This feature used to be part of VS Code-Pylance but currently does not work anymore.
 So while waiting for some updates to fix it/bring it back, I made my own extension as a quick workaround.
 
-This is to let you know that this extension, is just a "quick patch" and might not cover every case (at least for now).
+This is to let you know that this extension, is just a "quick hack" and might not cover every case (at least for now).
 
 ## Usage
 
