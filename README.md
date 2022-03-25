@@ -13,16 +13,20 @@ This is to let you know that this extension, is just a "quick hack" and might no
 
 ## Usage
 
-- Inside the `.vscode/settings.json`, the setting `python.defaultInterpreterPath` must be set with the Python interpreter which has access to the environment libraries.
+- From the Workspace settings, set `python.defaultInterpreterPath` to a valid Python interpreter which has access to the environment libraries.
+- Then after you write a `from module import` statement, you should see the modules suggestions based on those imports.
 
-![path](/resources/path.jpg)
+![path](/resources/setting.jpg)
 
 ### NOTE
 
-  1. If you don't set `python.defaultInterpreterPath`, the extension will get the OS base `python` interpreter (which usually does not have access to specific third-party libraries).
-  2. Even if your workspace has currently detected the proper Python interpreter, the extension still needs the full path of it, and the only way I am aware on how to get it, is from `python.defaultInterpreterPath`.
+  1. Setting `python.defaultInterpreterPath` must be set at a Workspace scope. Other scopes will not currently work.
+  2. If you don't manually set the `python.defaultInterpreterPath`, it will usually
+    default to the OS base `python` interpreter which usually, will not have access to specific third-party libraries.
+  3. Even if your workspace has currently detected the proper Python interpreter,
+    the extension still needs the full path of it, and the only way I am aware on how to get it, is from `python.defaultInterpreterPath`.
 
-## Difference from Pylance
+## Differences from Pylance
 
 The extension offers import suggestions only after a `from module import` statement is present inside the file, while Pylance is much broader (albeit currently not working for third-party modules).
 
@@ -35,3 +39,8 @@ The suggestion hints are also shown slightly different, so if there is a problem
 - Extension
 
     ![Extension](/resources/extension.jpg)
+
+## Notes
+
+- There is an output window which I use for debugging as in some rare occasions,
+the extension does not work outside the testing environments and I need to figure out why.
