@@ -1,5 +1,16 @@
 # Change Log
 
+## [0.0.8] 2022-03-25
+
+### Added
+
+- Temporary debug window in the output channel.
+
+### Fixed
+
+- Fixed some regex patterns which did wrongfully matched the cursor being
+  inside a multiple line import statement when it was not.
+
 ## [0.0.5] 2022-03-17
 
 ### Fixed
