@@ -13,17 +13,16 @@ This is to let you know that this extension, is just a "quick hack" and might no
 
 ## Usage
 
-- From the Workspace settings, set `python.defaultInterpreterPath` to a valid Python interpreter which has access to the environment libraries.
+- From the **Workspace** or **Folder** settings, set `python.defaultInterpreterPath` to a valid Python interpreter which has access to the environment libraries.
 - Then after you write a `from module import` statement, you should see the modules suggestions based on those imports.
 
 ![path](/resources/setting.jpg)
 
 ### NOTE
 
-  1. Setting `python.defaultInterpreterPath` must be set at a Workspace scope. Other scopes will not currently work.
-  2. If you don't manually set the `python.defaultInterpreterPath`, it will usually
-    default to the OS base `python` interpreter which usually, will not have access to specific third-party libraries.
-  3. Even if your workspace has currently detected the proper Python interpreter,
+  1. If not manually changed, most of the times, `python.defaultInterpreterPath` will default to the
+    OS base `python` interpreter. This allows the extension to work without problems, but will likely not suggest the specific third-party libraries.
+  2. Even if your workspace has currently detected the proper Python interpreter,
     the extension still needs the full path of it, and the only way I am aware on how to get it, is from `python.defaultInterpreterPath`.
 
 ## Differences from Pylance
