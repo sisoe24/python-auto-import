@@ -1,6 +1,12 @@
 # Change Log
 
-## [0.0.8] 2022-03-25
+## [0.0.10] 2022-03-26
+
+### Added
+
+- Can now work with multi root folder workspace.
+
+## [0.0.9] 2022-03-25
 
 ### Added
 
