@@ -123,6 +123,33 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
     }
 
     /**
+     * Get the python path from configuration settings.
+     * 
+     * The settings will be returned from the "active" workspace folder based
+     * on the file workspace. This means that it could be the based workspace if
+     * no folder are present, or one of the folders if is a multi-root workspace.
+     *
+     * @returns the python binary path or null if no path is found.
+     */
+    private getPythonPath(): string | null {
+        const file = vscode.window.activeTextEditor?.document.uri;
+        const workspace = vscode.workspace.getWorkspaceFolder(file!);
+
+        const pyBin = vscode.workspace
+            .getConfiguration("python", workspace?.uri)
+            .get("defaultInterpreterPath") as string;
+        debug(`Python binary is custom path: ${existsSync(pyBin)} - path: ${pyBin}`);
+
+        if (pyBin) {
+            return pyBin;
+        }
+        vscode.window.showErrorMessage(
+            `Python path for workspace folder "${workspace?.name}" is empty.`
+        );
+        return null;
+    }
+
+    /**
      * Get the python completion list elements.
      *
      * The completion list is created by executing a shell command invoking a
@@ -131,10 +158,10 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
      * @returns a PythonCompletionDict object or null if none are found.
      */
     private getPythonCompletionList(): Promise<PythonCompletionDict> | null {
-        const pyBin = vscode.workspace
-            .getConfiguration("python")
-            .get("defaultInterpreterPath") as string;
-        debug(`Python binary is custom path: ${existsSync(pyBin)} - path: ${pyBin}`);
+        const pyBin = this.getPythonPath();
+        if (!pyBin) {
+            return null;
+        }
 
         const extPath = vscode.extensions.getExtension("virgilsisoe.python-auto-import")
             ?.extensionPath as string;
@@ -143,18 +170,19 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
         let result: PythonCompletionDict;
 
         cp.exec(`${pyBin} ${script} ${this.imports}`, async (err, stdout, stderr) => {
-            // console.log("🚀 ~ stdout", stdout);
-            result = (await JSON.parse(stdout)) as PythonCompletionDict;
-
             if (stderr) {
                 vscode.window.showErrorMessage(stderr);
                 return null;
             }
+
             if (err) {
                 vscode.window.showErrorMessage(err.message);
                 return null;
             }
+
+            result = (await JSON.parse(stdout)) as PythonCompletionDict;
         });
+
         return new Promise((resolve) => {
             setTimeout(() => {
                 resolve(result);
@@ -192,6 +220,7 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
 
         return importedModulesList;
     }
+
     /**
      * Generate the completion items suggestion for the provider.
      *
