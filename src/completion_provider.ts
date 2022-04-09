@@ -4,6 +4,8 @@ import * as path from "path";
 import * as cp from "child_process";
 import { existsSync } from "fs";
 
+import * as utils from "./utils";
+
 type PythonCompletionDict = {
     label: string;
     details: {
@@ -124,7 +126,7 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
 
     /**
      * Get the python path from configuration settings.
-     * 
+     *
      * The settings will be returned from the "active" workspace folder based
      * on the file workspace. This means that it could be the based workspace if
      * no folder are present, or one of the folders if is a multi-root workspace.
@@ -132,17 +134,31 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
      * @returns the python binary path or null if no path is found.
      */
     private getPythonPath(): string | null {
+        let pyBin = "";
+
         const file = vscode.window.activeTextEditor?.document.uri;
         const workspace = vscode.workspace.getWorkspaceFolder(file!);
 
-        const pyBin = vscode.workspace
-            .getConfiguration("python", workspace?.uri)
-            .get("defaultInterpreterPath") as string;
-        debug(`Python binary is custom path: ${existsSync(pyBin)} - path: ${pyBin}`);
+        const userPyPath = utils.extensionConfig("pythonInterpreterPath") as string;
+        let debugMsg = "";
+        if (userPyPath) {
+            pyBin = userPyPath;
+            debugMsg = "Python binary is user defined custom path. ";
+        } else {
+            debugMsg = "Python binary is vscode setting custom path. ";
+            pyBin = vscode.workspace
+                .getConfiguration("python", workspace?.uri)
+                .get("defaultInterpreterPath") as string;
+        }
+
+        debug((debugMsg += `Is valid? ${existsSync(pyBin)} - value: ${pyBin}`));
+
+        console.log("pyBin", pyBin);
 
         if (pyBin) {
             return pyBin;
         }
+
         vscode.window.showErrorMessage(
             `Python path for workspace folder "${workspace?.name}" is empty.`
         );

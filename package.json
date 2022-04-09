@@ -32,6 +32,17 @@
 				"command": "python-auto-import.autoImport",
 				"title": "Python Auto Import"
 			}
+		],
+		"configuration": [
+			{
+				"title": "Python AutoImport",
+				"properties": {
+					"pythonAutoImport.pythonInterpreterPath": {
+						"type": "string",
+						"description": "The path of the workspace Python interpreter."
+					}
+				}
+			}
 		]
 	},
 	"scripts": {
