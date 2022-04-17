@@ -35,11 +35,11 @@
 		],
 		"configuration": [
 			{
-				"title": "Python AutoImport",
+				"title": "Python Auto Import",
 				"properties": {
 					"pythonAutoImport.pythonInterpreterPath": {
 						"type": "string",
-						"description": "The path of the workspace Python interpreter."
+						"description": "A Python interpreter path to inspect for module auto-suggestions."
 					}
 				}
 			}
