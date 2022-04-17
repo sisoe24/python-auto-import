@@ -73,15 +73,15 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
             }
         }
 
-        // Suggest when word starts at beginning, space or inside parenthesis
-        if (/(?<=\s|^|\()\w$/.exec(linePrefix)) {
-            debug("Start suggesting");
-            return this.getCompletionList(document);
+        const hoverWord = document.getWordRangeAtPosition(position);
+        const word = document.getText(hoverWord);
+
+        if (RegExp(`\\w+\\.\\w*${word}$`).exec(linePrefix)) {
+            debug("Dont suggest. line is part of object call");
+            return null;
         }
 
-        debug("No condition was matched. Abort and dont suggest");
-
-        return null;
+        return this.getCompletionList(document);
     }
 
     /**
@@ -152,8 +152,6 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
         }
 
         debug((debugMsg += `Is valid? ${existsSync(pyBin)} - value: ${pyBin}`));
-
-        console.log("pyBin", pyBin);
 
         if (pyBin) {
             return pyBin;
