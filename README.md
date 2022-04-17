@@ -13,16 +13,24 @@ So, this is to let you know that this extension is just a "quick hack" and might
 
 ## Usage
 
-- After installing the extension, from the Workspace or Folder settings, set `python.defaultInterpreterPath` value to a valid Python interpreter path. The path should be the one that has access to the environment libraries used in your workspace.
-- Then after you write a `from module import` statement, you should see the modules suggestions based on those imports.
+To use the extension, you need to set the python interpreter path to one that has access to the third-party libraries you intend to use in your workspace.
 
-![path](/resources/setting.jpg)
+You can set the path in two ways
+
+1. Using the extension configuration `pythonAutoImport.python`.
+2. Using the vscode configuration `python.defaultInterpreterPath`.
+
+> Note that the extension configuration will override the vscode configuration.
+
+Then after you write a `from module import` statement, you should see the modules suggestions based on those imports.
+
+![path](/resources/setting2.jpg)
 
 ### NOTE
 
   1. If not manually changed, most of the time, `python.defaultInterpreterPath` will default to the
-    OS base `python` interpreter. So the extension will work without problems but will likely not suggest specific third-party libraries.
-  2. Even if your workspace has detected the proper Python interpreter, the extension still needs its path. And the only way I am aware of how to get it is from `python.defaultInterpreterPath`.
+    OS base `python` interpreter. So the extension will work but will likely not suggest specific third-party libraries.
+  2. Even if your workspace has detected the proper Python interpreter, the extension still needs its path. And the only way I am aware of how to get it is from the settings.
 
 ## Differences from Pylance
 
