@@ -1,3 +1,14 @@
+[![vscode-marketplace](https://img.shields.io/badge/vscode-marketplace-blue)](https://marketplace.visualstudio.com/items?itemName=virgilsisoe.python-auto-import)
+[![vscode-version](https://img.shields.io/visual-studio-marketplace/v/virgilsisoe.python-auto-import)](https://marketplace.visualstudio.com/items?itemName=virgilsisoe.python-auto-import&ssr=false#version-history)
+[![vscode-installs](https://img.shields.io/visual-studio-marketplace/i/virgilsisoe.python-auto-import)](https://marketplace.visualstudio.com/items?itemName=virgilsisoe.python-auto-import)
+[![vscode-ratings](https://img.shields.io/visual-studio-marketplace/r/virgilsisoe.python-auto-import)](https://marketplace.visualstudio.com/items?itemName=virgilsisoe.python-auto-import&ssr=false#review-details)
+[![vscode-last-update](https://img.shields.io/visual-studio-marketplace/last-updated/virgilsisoe.python-auto-import)](https://marketplace.visualstudio.com/items?itemName=virgilsisoe.python-auto-import)
+
+[![openvsx-marketplace](https://img.shields.io/badge/openvsx-marketplace-C160EF)](https://open-vsx.org/extension/virgilsisoe/python-auto-import)
+[![openvsx-version](https://img.shields.io/open-vsx/v/virgilsisoe/python-auto-import?label=version)](https://open-vsx.org/extension/virgilsisoe/python-auto-import/changes)
+[![openvsx-downloads](https://img.shields.io/open-vsx/dt/virgilsisoe/python-auto-import)](https://open-vsx.org/extension/virgilsisoe/python-auto-import)
+[![openvsx-rating](https://img.shields.io/open-vsx/rating/virgilsisoe/python-auto-import)](https://open-vsx.org/extension/virgilsisoe/python-auto-import/reviews)
+
 # Python Auto Import README
 
 Suggest auto import for third-party modules based on modules already imported for Visual Studio Code.
