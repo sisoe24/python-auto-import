@@ -93,7 +93,7 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
      * @returns a string with the base identifier or null if no match is found.
      */
     private getAllImports(document: vscode.TextDocument): string[] | null {
-        return document.getText().match(/(?<=from\s)((?:\w+\.?)+)/g);
+        return document.getText().match(/(?<=(?<!#\s+)from\s)((?:\w+\.?)+)/g);
     }
 
     /**
