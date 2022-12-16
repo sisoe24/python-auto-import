@@ -103,5 +103,5 @@ for arg in modules:
     else:
         create_completions(module)
 
-# This is used to end to stdout
+# Send to stdout
 print(json.dumps(COMPLETIONS or ""))
