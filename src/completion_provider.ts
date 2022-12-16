@@ -181,26 +181,21 @@ export class PyCompletionProvider implements vscode.CompletionItemProvider {
             ?.extensionPath as string;
         const script = path.join(extPath, "scripts", "get_imports.py");
 
-        let result: PythonCompletionDict;
-
-        cp.exec(`${pyBin} ${script} ${this.imports}`, async (err, stdout, stderr) => {
-            if (stderr) {
-                vscode.window.showErrorMessage(stderr);
-                return null;
-            }
-
-            if (err) {
-                vscode.window.showErrorMessage(err.message);
-                return null;
-            }
-
-            result = (await JSON.parse(stdout)) as PythonCompletionDict;
-        });
-
+        // const timeout = utils.extensionConfig('timeout') as number;
         return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(result);
-            }, 200); // XXX: a lower value might not work
+            cp.exec(`${pyBin} ${script} ${this.imports}`, async (err, stdout, stderr) => {
+                if (stderr) {
+                    vscode.window.showErrorMessage(stderr);
+                    return null;
+                }
+
+                if (err) {
+                    vscode.window.showErrorMessage(err.message);
+                    return null;
+                }
+
+                resolve(JSON.parse(stdout) as PythonCompletionDict);
+            });
         });
     }
 
