@@ -70,22 +70,24 @@ def create_completions(module):
         attr = getattr(module, obj)
 
         if inspect.isclass(attr):
-            append_object(obj, CompletionItemKind.Class, package)
+            completion = CompletionItemKind.Class
 
         elif inspect.ismethod(attr) or inspect.isbuiltin(attr):
-            append_object(obj, CompletionItemKind.Method, package)
+            completion = CompletionItemKind.Method
 
         elif inspect.isfunction(attr):
-            append_object(obj, CompletionItemKind.Function, package)
+            completion = CompletionItemKind.Function
 
         elif inspect.ismodule(attr):
-            append_object(obj, CompletionItemKind.Module, package)
+            completion = CompletionItemKind.Module
 
         elif type(obj) in (float, int, str, list, tuple, set, dict):
-            append_object(obj, CompletionItemKind.Variable, package)
+            completion = CompletionItemKind.Variable
 
         else:
-            append_object(obj, CompletionItemKind.Value, package)
+            completion = CompletionItemKind.Value
+
+        append_object(obj, completion, package)
 
 
 _, *args = sys.argv
