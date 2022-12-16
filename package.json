@@ -1,7 +1,7 @@
 {
 	"name": "python-auto-import",
 	"displayName": "Python Auto Import",
-	"description": "Suggest Auto-import for third-party modules based on modules already imported.",
+	"description": "Auto-import suggestions for modules already imported.",
 	"version": "0.1.1",
 	"publisher": "virgilsisoe",
 	"repository": {
@@ -22,15 +22,15 @@
 		"python",
 		"auto-import",
 		"import",
-		"auto",
-		"third-party"
+		"auto"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "python-auto-import.autoImport",
-				"title": "Python Auto Import"
+				"title": "Python Auto Import",
+				"enablement": "false"
 			}
 		],
 		"configuration": [
@@ -39,7 +39,7 @@
 				"properties": {
 					"pythonAutoImport.pythonInterpreterPath": {
 						"type": "string",
-						"description": "A Python interpreter path to inspect for module auto-suggestions."
+						"description": "A Python interpreter path to inspect for the auto-suggestions."
 					}
 				}
 			}
