@@ -11,7 +11,7 @@
 
 # Python Auto Import README
 
-Suggest auto import for third-party modules based on modules already imported for Visual Studio Code.
+Auto-import suggestions for modules already imported in Visual Studio Code.
 
 ![Demo](/resources/demo.gif)
 
