@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.1.2] 2022-12-15
+
+## Fixed
+
+- Wrongfully suggest module for commented imports
+- Remove unnecessary timeout that prevent the extension to load all suggestions.
+
 ## [0.0.10] 2022-03-26
 
 ### Added
