@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.1.3] 2022-12-15
+
+## Deprecation notice
+
+- This extension is no longer maintained. 
+
 ## [0.1.2] 2022-12-15
 
 ## Fixed
