@@ -13,14 +13,19 @@
 
 Auto-import suggestions for modules already imported in Visual Studio Code.
 
-![Demo](/resources/demo.gif)
+---
+
+**NOTE**: They have added back this feature to one of latests version of Pylance, so you can uninstall this extension if you are using Pylance.
+
+---
 
 ## Disclaimer
 
+![Demo](/resources/demo.gif)
 This feature used to be part of VS Code-Pylance but currently does not work anymore.
 And while waiting for some updates to fix it/bring it back, I made my extension as a quick workaround.
 
-So, this is to let you know that this extension is just a "quick hack" and might not cover every case (at least for now).
+So, this is to let you know that this extension is just a "quick hack" and might not cover every case.
 
 ## Usage
 
